@@ -1,0 +1,66 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "spacing": 4,
+
+    "modules-left": ["niri/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["memory", "temperature", "pulseaudio", "network", "tray"],
+
+    "niri/workspaces": {
+        "format": "{index}"
+    },
+
+    "clock": {
+        "format": "\uf017  {:%a %d/%m   %H:%M}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "format": {
+                "today": "<span color='#fabd2f'><b>{}</b></span>"
+            }
+        }
+    },
+
+    "memory": {
+        "format": "\udb80\udf5b  {percentage}%",
+        "tooltip-format": "{used:0.1f} GiB / {total:0.1f} GiB",
+        "interval": 5
+    },
+
+    "temperature": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 85,
+        "format": "\uf2c9  {temperatureC}°C",
+        "interval": 5
+    },
+
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "\udb81\udf5f  mudo",
+        "format-icons": {
+            "default": ["\uf026", "\uf027", "\uf028"]
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
+    "network": {
+        "format-wifi": "\uf1eb",
+        "format-ethernet": "\udb80\ude00",
+        "format-disconnected": "\udb81\uddaa",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    }
+}
