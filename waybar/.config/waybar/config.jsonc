@@ -9,7 +9,7 @@
 
     "modules-left": ["niri/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["memory", "temperature", "pulseaudio", "network", "tray"],
+    "modules-right": ["memory", "temperature", "pulseaudio", "network", "tray", "custom/notification"],
 
     "niri/workspaces": {
         "format": "{index}"
@@ -62,5 +62,26 @@
     "tray": {
         "icon-size": 16,
         "spacing": 8
+    },
+
+    "custom/notification": {
+    	"tooltip": false,
+    	"format": "{icon}",
+    	"format-icons": {
+ 		"notification": "\uf0f3",
+        	"none": "\uf0a2",
+        	"dnd-notification": "\uf1f6",
+        	"dnd-none": "\uf1f7",
+        	"inhibited-notification": "\uf0f3",
+        	"inhibited-none": "\uf0a2",
+        	"dnd-inhibited-notification": "\uf1f6",
+        	"dnd-inhibited-none": "\uf1f7"
+    	},
+    	"return-type": "json",
+    	"exec-if": "which swaync-client",
+    	"exec": "swaync-client -swb",
+    	"on-click": "swaync-client -t -sw",
+   	"on-click-right": "swaync-client -d -sw",
+    	"escape": true
     }
 }

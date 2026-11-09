@@ -1,0 +1,81 @@
+@import url("/etc/xdg/swaync/style.css");
+
+* {
+  font-family: "JetBrainsMono Nerd Font", sans-serif;
+}
+
+.control-center {
+  background: rgba(40, 40, 40, 0.96);
+  color: #ebdbb2;
+  border: 2px solid #504945;
+  border-radius: 12px;
+}
+
+.notification-row .notification-background .notification,
+.notification {
+  background: #32302f;
+  color: #ebdbb2;
+  border: 1px solid #504945;
+  border-radius: 10px;
+}
+
+.notification .summary {
+  color: #fabd2f;
+}
+
+.notification .body {
+  color: #ebdbb2;
+}
+
+.close-button {
+  background: #504945;
+  color: #ebdbb2;
+}
+
+.close-button:hover {
+  background: #cc241d;
+}
+
+.widget-title,
+.widget-dnd,
+.widget-volume,
+.widget-mpris,
+.widget-buttons-grid,
+.widget-menubar {
+  color: #ebdbb2;
+}
+
+.widget-title > button,
+.widget-menubar button,
+.widget-buttons-grid button {
+  background: #3c3836;
+  color: #ebdbb2;
+  border: none;
+  border-radius: 8px;
+}
+
+.widget-title > button:hover,
+.widget-menubar button:hover,
+.widget-buttons-grid button:hover {
+  background: #504945;
+}
+
+.widget-buttons-grid button.toggle:checked {
+  background: #d79921;
+  color: #282828;
+}
+
+.widget-dnd > switch:checked {
+  background: #d79921;
+}
+
+.widget-volume,
+.widget-mpris {
+  background: #32302f;
+  border-radius: 10px;
+}
+
+.widget-volume trough highlight,
+.widget-volume highlight {
+  background: #d79921;
+}

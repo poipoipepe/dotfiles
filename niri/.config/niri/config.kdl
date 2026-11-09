@@ -257,6 +257,8 @@ spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 spawn-at-startup "firefox"
 spawn-at-startup "steam"
 spawn-at-startup "discord"
+spawn-at-startup "zapzap"
+spawn-at-startup "swaync"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.

@@ -51,6 +51,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
+#custom-notification
 #tray {
     background: #3c3836;
     padding: 0 10px;
@@ -100,4 +101,8 @@ tooltip label {
 #tray > .needs-attention {
     background: #cc241d;
     border-radius: 8px;
+}
+
+#custom-notification {
+    color: #fabd2f;
 }
