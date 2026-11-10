@@ -138,7 +138,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 3
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -269,7 +269,7 @@ hotkey-overlay {
 // Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
 // This option will also fix border/focus ring drawing behind some semitransparent windows.
 // After enabling or disabling this, you need to restart the apps for this to take effect.
-// prefer-no-csd
+prefer-no-csd
 
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
@@ -327,7 +327,7 @@ window-rule {
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
@@ -349,6 +349,7 @@ window-rule {
 
 window-rule {
     match app-id="firefox" at-startup=true
+    open-maximized true
     open-on-output "DP-2"
 }
 
@@ -647,9 +648,9 @@ binds {
     Mod+Shift+P { power-off-monitors; }
 
     // CUSTOM
-    // clipboard manager (cliphist)
-    Mod+Alt+V { spawn "sh" "-c" "~/.local/bin/cliphist-fuzzel-img"; }
-	
+    // clipboard manager (noctalia)
+    Mod+Alt+V { spawn-sh "noctalia msg panel-toggle clipboard"; }
+
     // noctalia
     Mod+Space { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
