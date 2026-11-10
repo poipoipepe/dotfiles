@@ -1,0 +1,127 @@
+/**
+ * @name Gruvbox Escuro
+ * @description Gruvbox mais escuro (tons "hard") e com cantos arredondados.
+ * @author poipoipepe
+ * @version 1.0.0
+ */
+
+:root,
+.theme-dark,
+.theme-darker,
+.theme-midnight,
+.visual-refresh {
+  /* Fundos (do mais escuro ao mais claro) */
+  --g-lowest: #141617;
+  --g-lower: #191b1c;
+  --g-low: #1d2021;
+  --g-high: #282828;
+  --g-higher: #32302f;
+  --g-highest: #3c3836;
+  --g-line: #3c3836;
+
+  /* Texto e acentos */
+  --g-text: #ebdbb2;
+  --g-text-strong: #fbf1c7;
+  --g-text-muted: #a89984;
+  --g-text-dim: #7c6f64;
+  --g-accent: #d79921;
+  --g-accent-hover: #fabd2f;
+  --g-link: #83a598;
+  --g-green: #98971a;
+  --g-red: #cc241d;
+
+  /* Interface nova do Discord (visual refresh) */
+  --background-base-lowest: var(--g-lowest);
+  --background-base-lower: var(--g-lower);
+  --background-base-low: var(--g-low);
+  --background-surface-high: var(--g-high);
+  --background-surface-higher: var(--g-higher);
+  --background-surface-highest: var(--g-highest);
+  --chat-background-default: var(--g-low);
+  --border-subtle: var(--g-line);
+  --border-faint: var(--g-line);
+  --text-default: var(--g-text);
+  --text-strong: var(--g-text-strong);
+
+  /* Interface antiga (variáveis que ainda aparecem em várias partes) */
+  --background-tertiary: var(--g-lowest);
+  --background-secondary: var(--g-lower);
+  --background-secondary-alt: var(--g-lowest);
+  --background-primary: var(--g-low);
+  --background-floating: var(--g-high);
+  --background-nested-floating: var(--g-higher);
+  --background-mobile-primary: var(--g-low);
+  --background-mobile-secondary: var(--g-lower);
+  --modal-background: var(--g-low);
+  --modal-footer-background: var(--g-lower);
+  --channeltextarea-background: var(--g-high);
+  --input-background: var(--g-high);
+  --deprecated-card-bg: var(--g-high);
+  --home-background: var(--g-low);
+
+  --background-modifier-hover: rgba(80, 73, 69, 0.35);
+  --background-modifier-active: rgba(80, 73, 69, 0.5);
+  --background-modifier-selected: rgba(80, 73, 69, 0.6);
+  --background-modifier-accent: var(--g-line);
+
+  --text-normal: var(--g-text);
+  --text-muted: var(--g-text-muted);
+  --text-link: var(--g-link);
+  --header-primary: var(--g-text-strong);
+  --header-secondary: var(--g-text-muted);
+  --channels-default: var(--g-text-muted);
+  --interactive-normal: var(--g-text-muted);
+  --interactive-hover: var(--g-text);
+  --interactive-active: var(--g-text-strong);
+  --interactive-muted: var(--g-text-dim);
+
+  /* Cor de destaque (botões, menções, links ativos) */
+  --brand-experiment: var(--g-accent);
+  --brand-500: var(--g-accent);
+  --brand-560: #b57614;
+  --brand-600: #b57614;
+  --button-filled-brand-background: var(--g-accent);
+  --button-filled-brand-background-hover: var(--g-accent-hover);
+  --button-filled-brand-text: var(--g-low);
+  --mention-foreground: var(--g-accent-hover);
+  --mention-background: rgba(215, 153, 33, 0.15);
+  --status-positive: var(--g-green);
+  --status-danger: var(--g-red);
+
+  /* Cantos mais arredondados */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+/* Arredondamento extra em partes que não usam as variáveis */
+[class*="channelTextArea"] [class*="scrollableContainer"],
+[class*="searchBar"],
+[class*="search_"] [class*="searchBar"],
+[class*="autocomplete"],
+[class*="menu_"],
+[class*="popout"],
+[class*="userPopout"],
+[class*="tooltip_"] {
+  border-radius: 12px !important;
+}
+
+button[class*="button_"],
+[class*="tabBar"] [class*="item_"],
+[class*="channel_"] [class*="link_"],
+[class*="interactive_"],
+[class*="peopleListItem"] {
+  border-radius: 8px !important;
+}
+
+/* Barra de rolagem discreta */
+::-webkit-scrollbar-thumb {
+  background-color: var(--g-highest) !important;
+  border-radius: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
