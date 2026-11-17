@@ -260,7 +260,7 @@ layout {
 spawn-at-startup "gammastep" "-l" "-23.5:-46.6"
 spawn-at-startup "firefox"
 spawn-at-startup "steam"
-spawn-at-startup "discord"
+spawn-at-startup "vesktop"
 spawn-at-startup "zapzap"
 spawn-at-startup "noctalia"
 
@@ -630,7 +630,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
+    Print { spawn-sh "noctalia msg screenshot-region --annotate --quality 100"; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
 
