@@ -1,0 +1,69 @@
+id          = "poipoipepe/hyperx-battery"
+name        = "HyperX Battery"
+version     = "1.0.1"
+plugin_api  = 24
+author      = "poipoipepe"
+license     = "MIT"
+icon        = "headphones"
+description = "HyperX Cloud Stinger Core Wireless battery on the bar."
+dependencies = ["python"]
+
+# Plugin settings (Settings → Plugins → gear icon)
+[[setting]]
+key       = "script"
+type      = "file"
+label_key = "settings.script.label"
+description_key = "settings.script.description"
+default   = "~/.local/bin/hyperx-stinger-battery"
+
+[[setting]]
+key       = "interval"
+type      = "int"
+label_key = "settings.interval.label"
+description_key = "settings.interval.description"
+default   = 60
+min       = 15
+max       = 600
+step      = 15
+
+[[setting]]
+key       = "low_threshold"
+type      = "int"
+label_key = "settings.low_threshold.label"
+description_key = "settings.low_threshold.description"
+default   = 15
+min       = 5
+max       = 50
+
+[[setting]]
+key       = "notify_low"
+type      = "bool"
+label_key = "settings.notify_low.label"
+default   = true
+
+# Reads the headset once and shares the result with every widget
+[[service]]
+id    = "poller"
+entry = "service.luau"
+
+# The bar widget (can be placed on several bars/monitors)
+[[widget]]
+id    = "battery"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key       = "icon_style"
+  type      = "select"
+  label_key = "settings.icon_style.label"
+  description_key = "settings.icon_style.description"
+  default   = "battery"
+  options   = [
+    { value = "battery", label_key = "settings.icon_style.battery" },
+    { value = "headset", label_key = "settings.icon_style.headset" },
+  ]
+
+  [[widget.setting]]
+  key       = "show_percent"
+  type      = "bool"
+  label_key = "settings.show_percent.label"
+  default   = true

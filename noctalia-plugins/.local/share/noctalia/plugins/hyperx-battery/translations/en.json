@@ -1,0 +1,14 @@
+{
+  "settings.script.label": "Battery script",
+  "settings.script.description": "Path to hyperx-stinger-battery.",
+  "settings.interval.label": "Refresh interval (seconds)",
+  "settings.interval.description": "How often the headset battery is read.",
+  "settings.low_threshold.label": "Low battery (%)",
+  "settings.low_threshold.description": "Below this level the widget turns red and you get a notification.",
+  "settings.notify_low.label": "Notify on low battery",
+  "settings.icon_style.label": "Icon",
+  "settings.icon_style.description": "A battery that drains with the level, or a headset icon.",
+  "settings.icon_style.battery": "Battery (follows the level)",
+  "settings.icon_style.headset": "Headset",
+  "settings.show_percent.label": "Show percentage"
+}

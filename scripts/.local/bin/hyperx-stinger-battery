@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 """
-Bateria do HyperX Cloud Stinger Core Wireless no Linux (via /dev/hidraw).
+HyperX Cloud Stinger Core Wireless battery on Linux (via /dev/hidraw).
 
-Receptores suportados:
+Supported receivers:
   - 03F0:0A93  HyperX Cloud Stinger Core (Wireless) - PS  (HP / PlayStation)
   - 0951:170B  HyperX Cloud Stinger Core Wireless + 7.1   (Kingston, original)
 
-Protocolo portado do HyperBatteryMonitor (C#, Windows), licença MIT:
+Protocol ported from HyperBatteryMonitor (C#, Windows), MIT license:
   https://github.com/davidsantanaalves/HyperBatteryMonitor
   Devices/CloudStingerCoreWirelessDevice.cs
   Copyright (c) 2026 David Santana
 
-Uso:
-  hyperx-stinger-battery            texto legível
-  hyperx-stinger-battery --json     JSON (para barras e scripts)
-  hyperx-stinger-battery --debug    mostra os bytes enviados e recebidos
+Usage:
+  hyperx-stinger-battery            human-readable text
+  hyperx-stinger-battery --json     JSON (for bars and scripts)
+  hyperx-stinger-battery --short    percentage only (e.g. "80%", "80% +" when charging, "off")
+  hyperx-stinger-battery --debug    print the bytes sent and received
 """
 
 import argparse
@@ -50,8 +51,8 @@ NOT_CHARGING = 3
 CHARGING = 5
 FULL = 6
 
-RESPONSE_DELAY = 0.02   # 20 ms, como no projeto original
-PS_ATTEMPTS = 10        # o receptor PS às vezes devolve primeiro uma resposta antiga
+RESPONSE_DELAY = 0.02   # 20 ms, same as the original project
+PS_ATTEMPTS = 10        # the PS receiver sometimes returns a stale report first
 
 CHARGING_KNOTS = [3.4000, 3.8309, 3.8707, 3.9162, 3.9299, 3.9456,
                   3.9674, 4.0000, 4.0497, 4.0900, 4.1300]
@@ -84,17 +85,17 @@ def hidiocgfeature(size):
     return _ioc(3, 0x07, size)
 
 
-# ---------- descritor HID: tamanho do feature report 0xFF ----------
+# ---------- HID descriptor: size of feature report 0xFF ----------
 
 def feature_report_length(descriptor, report_id):
-    """Soma os bits dos itens Feature do report_id; devolve bytes + 1 (o ID)."""
+    """Sum the Feature item bits for report_id; return bytes + 1 (the ID byte)."""
     i = 0
     globals_ = {"size": 0, "count": 0, "id": 0}
     stack = []
     bits = {}
     while i < len(descriptor):
         prefix = descriptor[i]
-        if prefix == 0xFE:  # item longo
+        if prefix == 0xFE:  # long item
             if i + 1 >= len(descriptor):
                 break
             i += 3 + descriptor[i + 1]
@@ -123,7 +124,7 @@ def feature_report_length(descriptor, report_id):
     return (bits[report_id] + 7) // 8 + 1
 
 
-# ---------- encontrar o receptor ----------
+# ---------- find the receiver ----------
 
 def find_receiver():
     found = []
@@ -154,7 +155,7 @@ def find_receiver():
     return found
 
 
-# ---------- troca de feature reports ----------
+# ---------- feature report exchange ----------
 
 def exchange(fd, command, length, accept=None, attempts=1):
     buf = bytearray(length)
@@ -204,10 +205,10 @@ def query(dev, key, length):
                      accept=is_ps_battery_response if is_ps else None,
                      attempts=PS_ATTEMPTS if is_ps else 1)
         if r is None:
-            raise RuntimeError("o headset não respondeu ao pedido de bateria")
+            raise RuntimeError("the headset did not answer the battery request")
         charge = r[CHARGE_INDEX]
         if charge not in (NOT_CHARGING, CHARGING, FULL):
-            raise RuntimeError(f"estado de carga inesperado: 0x{charge:02X}")
+            raise RuntimeError(f"unexpected charge state: 0x{charge:02X}")
         mv = int.from_bytes(r[VOLTAGE_INDEX:VOLTAGE_INDEX + 2], "little", signed=True)
         result["millivolts"] = mv
         result["charging"] = charge == CHARGING
@@ -219,24 +220,31 @@ def query(dev, key, length):
 
 def main():
     global DEBUG
-    parser = argparse.ArgumentParser(description="Bateria do HyperX Cloud Stinger Core Wireless")
-    parser.add_argument("--json", action="store_true", help="saída em JSON")
-    parser.add_argument("--debug", action="store_true", help="mostra os bytes trocados")
+    parser = argparse.ArgumentParser(description="HyperX Cloud Stinger Core Wireless battery")
+    parser.add_argument("--json", action="store_true", help="JSON output")
+    parser.add_argument("--short", action="store_true", help="short output for bars (e.g. 80%%)")
+    parser.add_argument("--debug", action="store_true", help="print the bytes exchanged")
     args = parser.parse_args()
     DEBUG = args.debug
 
     receivers = find_receiver()
     if not receivers:
-        msg = "receptor não encontrado (ou sem permissão para ler /sys)"
+        msg = "receiver not found (or no permission to read /sys)"
         print(json.dumps({"error": msg}) if args.json else msg, file=sys.stdout if args.json else sys.stderr)
         return 2
+
+    # Lock: only one query talks to the receiver at a time.
+    lock_dir = os.environ.get("XDG_RUNTIME_DIR") or "/tmp"
+    lock_fd = os.open(os.path.join(lock_dir, f"hyperx-stinger-battery-{os.getuid()}.lock"),
+                      os.O_RDWR | os.O_CREAT, 0o600)
+    fcntl.flock(lock_fd, fcntl.LOCK_EX)
 
     last_error = None
     for dev, key, length in receivers:
         try:
             result = query(dev, key, length)
         except PermissionError:
-            last_error = f"sem permissão para abrir {dev} (veja a regra udev)"
+            last_error = f"no permission to open {dev} (check the udev rule)"
             continue
         except (OSError, RuntimeError) as e:
             last_error = f"{dev}: {e}"
@@ -244,10 +252,15 @@ def main():
 
         if args.json:
             print(json.dumps(result, ensure_ascii=False))
+        elif args.short:
+            if not result["connected"]:
+                print("off")
+            else:
+                print(f"{result['percent']}%" + (" +" if result["charging"] else ""))
         elif not result["connected"]:
-            print(f"{result['device']}: headset desligado ou fora de alcance")
+            print(f"{result['device']}: headset off or out of range")
         else:
-            state = " (carregando)" if result["charging"] else ""
+            state = " (charging)" if result["charging"] else ""
             print(f"{result['device']}: {result['percent']}%{state} "
                   f"[{result['millivolts']} mV]")
         return 0
